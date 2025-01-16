@@ -21,3 +21,10 @@ export const profilesSchema = z.object({
 export const notificationsSchema = z.object({
     
 })
+export const loginUserSchema = z.object({
+
+})
+
+export const registerSchema = z.object({
+
+})
