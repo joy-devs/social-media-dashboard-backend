@@ -25,6 +25,10 @@ export const loginUserSchema = z.object({
 
 })
 
-export const registerSchema = z.object({
+export const registerUserSchema = z.object({
+
+})
+
+export const TokensSchema = z.object({
 
 })

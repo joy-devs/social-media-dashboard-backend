@@ -1,19 +1,32 @@
-import{Hono} from 'hono'
-import { zValidator } from '@hono/zod-validator'
-import {registerUser,loginUser} from './auth.controller'
-import {registerUserSchema, loginUserSchema } from '../validator'
+import { Hono } from 'hono';
+import { listauthentications, getauthentications, createauthentications, updateauthentications, deleteauthentications } from './authentication.controller'; 
+import { zValidator } from '@hono/zod-validator'; 
+import { TokensSchema } from '../validator'; 
+import { adminRoleAuth,bothRoleAuth } from '../middleware/BearAuth';
 
- export const authRouter =new  Hono();
+export const authenticationsRouter = new Hono();
 
-authRouter.post('/register', zValidator('json', registerUserSchema, (result, c) => {
-if(!result.success){
-    return c.json(result.error, 400)
-}
+// Get all authentications
+authenticationsRouter.get('/authentications',  listauthentications);
 
-}), registerUser)
+// Get a single authentication
+authenticationsRouter.get('/authentications/:id', getauthentications);
 
-authRouter.post('/login', zValidator('json', loginUserSchema, (result, c) => {
-    if(!result.success) {
-        return c.json(result.error, 400)
-    }
-}), loginUser)
+// Create a authentication
+authenticationsRouter.post(
+  '/authentications',
+  
+  createauthentications
+);
+
+// Update a authentication
+authenticationsRouter.put(
+  '/users/:id',
+  
+   updateauthentications
+);
+
+// Delete a authentication
+authenticationsRouter.delete('/users/:id',  deleteauthentications);
+
+export default authenticationsRouter;
