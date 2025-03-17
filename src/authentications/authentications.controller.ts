@@ -1,6 +1,6 @@
 
 import { Context } from 'hono';
-import {AuthenticationTableService, getAuthenticationTableService, createAuthenticationTableService, updateAuthenticationTableService, deleteAuthenticationTableService } from './authentication.services';
+import {AuthenticationTableService, getAuthenticationTableService, createAuthenticationTableService, updateAuthenticationTableService, deleteAuthenticationTableService } from './authentications.services';
 
 // List all authentications
 export const listauthentications = async (c: Context): Promise<Response> => {
