@@ -1,41 +1,47 @@
-
 import { Context } from 'hono';
-import {AuthenticationTableService, getAuthenticationTableService, createAuthenticationTableService, updateAuthenticationTableService, deleteAuthenticationTableService } from './authentications.services';
+import { 
+  createAuthUserService, 
+  gettokensService, 
+  createtokensService, 
+  updatetokensService, 
+  deletetokensService 
+} from './authentications.services';
 
-// List all authentications
-export const listauthentications = async (c: Context): Promise<Response> => {
-  const authentications = await AuthenticationTableService();
-  return c.json(authentications);
+// List all tokens
+export const listtokens = async (c: Context): Promise<Response> => {
+  const userData = {}; // Ensure you're passing the required data
+  const tokens = await createAuthUserService(userData); // Fixed: Now passing an argument
+  return c.json(tokens);
 };
 
-// Get a single authentication by ID
-export const getauthentications = async (c: Context): Promise<Response> => {
+// Get a single token by ID
+export const gettokens = async (c: Context): Promise<Response> => {
   const id = Number(c.req.param('id'));
-  const authentication = await getAuthenticationTableService(id);
-  if (authentication) {
-    return c.json(authentication);
+  const token = await gettokensService(id);
+  if (token) {
+    return c.json(token);
   }
-  return c.json({ message: 'authentication not found' }, 404);
+  return c.json({ message: 'Token not found' }, 404);
 };
 
-// Create a new authentication
-export const createauthentications = async (c: Context): Promise<Response> => {
-  const authenticationData = await c.req.json();
-  const authentication = await createAuthenticationTableService(authenticationData);
-  return c.json(authentication, 201);
+// Create a new token
+export const createtokens = async (c: Context): Promise<Response> => {
+  const tokenData = await c.req.json();
+  const token = await createtokensService(tokenData);
+  return c.json(token, 201);
 };
 
-// Update a authentication
-export const updateauthentications = async (c: Context): Promise<Response> => {
+// Update a token
+export const updatetokens = async (c: Context): Promise<Response> => {
   const id = Number(c.req.param('id'));
-  const authenticationData = await c.req.json();
-  const message = await updateAuthenticationTableService(id, authenticationData);
+  const tokenData = await c.req.json();
+  const message = await updatetokensService(id, tokenData);
   return c.json({ message });
 };
 
-// Delete a authentication
-export const deleteauthentications = async (c: Context): Promise<Response> => {
+// Delete a token
+export const deletetokens = async (c: Context): Promise<Response> => {
   const id = Number(c.req.param('id'));
-  const message = await deleteAuthenticationTableService(id);
+  const message = await deletetokensService(id);
   return c.json({ message });
 };
