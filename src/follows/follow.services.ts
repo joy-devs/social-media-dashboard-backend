@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import db from "../drizzle/db";
-import { follows, TIFollow, TSFollow } from "../drizzle/schema"; // 
+import { follows, TIFollow, TSFollow } from "../drizzle/schema";  
 
 export const followersService = async (limit?: number): Promise<TSFollow[] | null> => {
     if (limit) {
