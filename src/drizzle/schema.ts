@@ -15,6 +15,19 @@ export const users = pgTable('users', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+export const AuthonUser = pgTable("auth_on_users", {
+  id: serial('id').primaryKey(),
+//   userId:integer("user_id").notNull().references(() => UsersTable.user_id, { onDelete :"cascade"}),
+  password:varchar("password", {length:100}),
+  username:varchar("username", {length:100}),
+  address: varchar('address',{length:100}),
+  fullname:text("full_name"),
+  contact_Phone:integer("contact_phone"),
+  role: roleEnum("role").default("user"),
+  email:varchar("email", {length:100} )
+});
+
+
 // Posts table
 export const posts = pgTable('posts', {
   id: serial('id').primaryKey(),
@@ -129,3 +142,8 @@ export type TSMessage = typeof messages.$inferSelect;
 // Notifications table types
 export type TINotification = typeof notifications.$inferInsert;
 export type TSNotification = typeof notifications.$inferSelect;
+
+// AuthonUser
+export type TIAuthonUser = typeof AuthonUser.$inferInsert;
+export type TSAuthonUser= typeof AuthonUser.$inferSelect;
+ 
