@@ -5,7 +5,7 @@ import {
   createtokensService, 
   updatetokensService, 
   deletetokensService 
-} from './authentications.services';
+} from './tokens.services';
 
 // List all tokens
 export const listtokens = async (c: Context): Promise<Response> => {
