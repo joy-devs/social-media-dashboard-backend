@@ -1,5 +1,6 @@
-import { pgTable, serial, text, timestamp, integer, varchar, unique } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, timestamp, integer, varchar, unique, relations } from 'drizzle-orm/pg-core';
 import { pgEnum } from 'drizzle-orm/pg-core';
+import { relations } from "drizzle-orm";
 
 // pgEnums
 export const roleEnum = pgEnum("role", ["user", "admin"]);
@@ -15,23 +16,22 @@ export const users = pgTable('users', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
-export const AuthonUser = pgTable("auth_on_users", {
+export const authOnUser = pgTable("auth_on_users", {
   id: serial('id').primaryKey(),
-  userId:integer("user_id").notNull().references(() => users.id, { onDelete :"cascade"}),
-  password:varchar("password", {length:100}),
-  username:varchar("username", {length:100}),
-  address: varchar('address',{length:100}),
-  fullname:text("full_name"),
-  contact_Phone:integer("contact_phone"),
+  userId: integer("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  password: varchar("password", { length: 100 }),
+  username: varchar("username", { length: 100 }),
+  address: varchar('address', { length: 100 }),
+  fullname: text("full_name"),
+  contactPhone: integer("contact_phone"),
   role: roleEnum("role").default("user"),
-  email:varchar("email", {length:100} )
+  email: varchar("email", { length: 100 })
 });
-
 
 // Posts table
 export const posts = pgTable('posts', {
   id: serial('id').primaryKey(),
-  authorId: integer('author_id').references(() => users.id),  // Foreign key to users table
+  authorId: integer('author_id').notNull().references(() => users.id, { onDelete: "cascade" }),
   content: text('content').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
 });
@@ -39,8 +39,8 @@ export const posts = pgTable('posts', {
 // Comments table
 export const comments = pgTable('comments', {
   id: serial('id').primaryKey(),
-  postId: integer('post_id').references(() => posts.id),  // Foreign key to posts table
-  authorId: integer('author_id').references(() => users.id),  // Foreign key to users table
+  postId: integer('post_id').notNull().references(() => posts.id, { onDelete: "cascade" }),
+  authorId: integer('author_id').notNull().references(() => users.id, { onDelete: "cascade" }),
   content: text('content').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
 });
@@ -48,16 +48,16 @@ export const comments = pgTable('comments', {
 // Follows table
 export const follows = pgTable('follows', {
   id: serial('id').primaryKey(),
-  followerId: integer('follower_id').references(() => users.id),  // Foreign key to users table
-  followingId: integer('following_id').references(() => users.id),  // Foreign key to users table
+  followerId: integer('follower_id').notNull().references(() => users.id, { onDelete: "cascade" }),
+  followingId: integer('following_id').notNull().references(() => users.id, { onDelete: "cascade" }),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
 // Likes table
 export const likes = pgTable('likes', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),  // Foreign key to users table
-  postId: integer('post_id').references(() => posts.id),  // Foreign key to posts table
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: "cascade" }),
+  postId: integer('post_id').notNull().references(() => posts.id, { onDelete: "cascade" }),
   createdAt: timestamp('created_at').defaultNow(),
 }, (table) => {
   return {
@@ -68,21 +68,20 @@ export const likes = pgTable('likes', {
 // Tokens table (for user authentication)
 export const tokens = pgTable('tokens', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),  // Foreign key to users table
-  password:varchar("password", {length:100}),
-  username:varchar("username", {length:100}),
-  address: varchar('address',{length:100}),
-  fullname:text("full_name"),
-  contact_Phone:integer("contact_phone"),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: "cascade" }),
+  password: varchar("password", { length: 100 }),
+  username: varchar("username", { length: 100 }),
+  address: varchar('address', { length: 100 }),
+  fullname: text("full_name"),
+  contactPhone: integer("contact_phone"),
   role: roleEnum("role").default("user"),
-  email:varchar("email", {length:100} ),
-
+  email: varchar("email", { length: 100 }),
 });
 
 // Profiles table (additional profile details)
 export const profiles = pgTable('profiles', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),  // Foreign key to users table
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: "cascade" }),
   bio: text('bio'),
   avatarUrl: text('avatar_url'),
   createdAt: timestamp('created_at').defaultNow(),
@@ -92,8 +91,8 @@ export const profiles = pgTable('profiles', {
 // Messages table (for direct messaging)
 export const messages = pgTable('messages', {
   id: serial('id').primaryKey(),
-  senderId: integer('sender_id').references(() => users.id),  // Foreign key to sender (user)
-  recipientId: integer('recipient_id').references(() => users.id),  // Foreign key to recipient (user)
+  senderId: integer('sender_id').notNull().references(() => users.id, { onDelete: "cascade" }),
+  recipientId: integer('recipient_id').notNull().references(() => users.id, { onDelete: "cascade" }),
   content: text('content').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
 });
@@ -101,49 +100,34 @@ export const messages = pgTable('messages', {
 // Notifications table (for user notifications)
 export const notifications = pgTable('notifications', {
   id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),  // Foreign key to user receiving notification
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: "cascade" }),
   message: text('message').notNull(),
-  isRead: integer('is_read').default(0),  // 0: unread, 1: read
+  isRead: integer('is_read').default(0),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
-// Users table types
-export type TIUser = typeof users.$inferInsert;
-export type TSUser = typeof users.$inferSelect;
+// Define Relationships using Drizzle's relations API
+export const userRelations = relations(users, ({ one, many }) => ({
+  authOnUser: one(authOnUser, {
+    fields: [users.id],
+    references: [authOnUser.userId]
+  }),
+  posts: many(posts),
+  comments: many(comments),
+  followsFollower: many(follows, { fields: [users.id], references: [follows.followerId] }),
+  followsFollowing: many(follows, { fields: [users.id], references: [follows.followingId] }),
+  likes: many(likes),
+  tokens: many(tokens),
+  profiles: one(profiles, {
+    fields: [users.id],
+    references: [profiles.userId]
+  }),
+  messagesSent: many(messages, { fields: [users.id], references: [messages.senderId] }),
+  messagesReceived: many(messages, { fields: [users.id], references: [messages.recipientId] }),
+  notifications: many(notifications)
+}));
 
-// Posts table types
-export type TIPost = typeof posts.$inferInsert;
-export type TSPost = typeof posts.$inferSelect;
-
-// Comments table types
-export type TIComment = typeof comments.$inferInsert;
-export type TSComment = typeof comments.$inferSelect;
-
-// Follows table types
-export type TIFollow = typeof follows.$inferInsert;
-export type TSFollow = typeof follows.$inferSelect;
-
-// Likes table types
-export type TILike = typeof likes.$inferInsert;
-export type TSLike = typeof likes.$inferSelect;
-
-// Tokens table types
-export type TIToken = typeof tokens.$inferInsert;
-export type TSToken = typeof tokens.$inferSelect;
-
-// Profiles table types
-export type TIProfile = typeof profiles.$inferInsert;
-export type TSProfile = typeof profiles.$inferSelect;
-
-// Messages table types
-export type TIMessage = typeof messages.$inferInsert;
-export type TSMessage = typeof messages.$inferSelect;
-
-// Notifications table types
-export type TINotification = typeof notifications.$inferInsert;
-export type TSNotification = typeof notifications.$inferSelect;
-
-// AuthonUser
-export type TIAuthonUser = typeof AuthonUser.$inferInsert;
-export type TSAuthonUser= typeof AuthonUser.$inferSelect;
- 
+export const postRelations = relations(posts, ({ many }) => ({
+  comments: many(comments),
+  likes: many(likes)
+}));
