@@ -1,4 +1,4 @@
-GET http://localhost:8000/api/messages
+GET http://localhost:8000/api/tokens
 ###
 
 POST http://localhost:8000/api/register

@@ -17,7 +17,7 @@ export const users = pgTable('users', {
 
 export const AuthonUser = pgTable("auth_on_users", {
   id: serial('id').primaryKey(),
-//   userId:integer("user_id").notNull().references(() => UsersTable.user_id, { onDelete :"cascade"}),
+  userId:integer("user_id").notNull().references(() => users.id, { onDelete :"cascade"}),
   password:varchar("password", {length:100}),
   username:varchar("username", {length:100}),
   address: varchar('address',{length:100}),
