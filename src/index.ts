@@ -10,6 +10,7 @@ import {notificationsRouter} from "./notify/notify.router"
 import {likesRouter} from "./likes/likes.router"
 import{tokensRouter} from "./tokens/tokens.router"
 import { authRouter } from "./auth/auth.router";
+import {messagesRouter} from "./messages/messages.router"
 
 
 import { cors } from 'hono/cors'
@@ -37,6 +38,7 @@ app.route("/api", notificationsRouter)
 app.route("/api", likesRouter )
 app.route("/api", tokensRouter)
 app.route("/api", authRouter)
+app.route("/api", messagesRouter)
 
 
 app.get("/", (c) => {
