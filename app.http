@@ -1,4 +1,4 @@
-GET http://localhost:8000/api/comments
+GET http://localhost:8000/api/likes
 ###
 
 POST http://localhost:8000/api/register
