@@ -131,3 +131,28 @@ export const postRelations = relations(posts, ({ many }) => ({
   comments: many(comments),
   likes: many(likes)
 }));
+
+//Types
+export type TIFollow = typeof follows.$inferInsert;
+export type TSFollow = typeof follows.$inferSelect;
+
+export type TILike = typeof likes.$inferInsert;
+export type TSLike = typeof likes.$inferSelect;
+
+export type TIMessage = typeof messages.$inferInsert;
+export type TSMessage = typeof messages.$inferSelect;
+
+export type TIPost = typeof posts.$inferInsert;
+export type TSPost = typeof posts.$inferSelect;
+
+export type TIProfile = typeof profiles.$inferInsert;
+export type TSProfile = typeof profiles.$inferSelect;
+
+export type TIToken = typeof tokens.$inferInsert;
+export type TSToken = typeof tokens.$inferSelect;
+
+export type TIUser = typeof users.$inferInsert;
+export type TSUser = typeof users.$inferSelect;
+
+
+
