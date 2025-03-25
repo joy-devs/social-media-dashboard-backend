@@ -1,15 +1,15 @@
-import { AuthonUser, TIAuthonUser, TSAuthonUser } from "../drizzle/schema";
+import { authOnUser, TIAuthonUser, TSAuthonUser } from "../drizzle/schema";
 import db from "../drizzle/db";
 import { sql } from "drizzle-orm";
 
 export const createAuthUserService = async (user: TIAuthonUser): Promise<string | null> => {
-    await db.insert(AuthonUser).values(user)
+    await db.insert(authOnUser).values(user)
     return "User created successfully";
 }
 
 export const userLoginService = async (user: TSAuthonUser) => {
     const { username, password } = user;
-    return await db.query.AuthonUser.findFirst({
+    return await db.query.authOnUser.findFirst({
         columns: {
             username: true,
             role: true,
@@ -18,7 +18,7 @@ export const userLoginService = async (user: TSAuthonUser) => {
             // id:true,
             // userId:true
             
-        }, where: sql` ${AuthonUser.username} = ${username}`,
+        }, where: sql` ${authOnUser.username} = ${username}`,
         // with: {
         //     user: {
         //         columns: {

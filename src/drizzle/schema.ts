@@ -151,8 +151,12 @@ export type TSProfile = typeof profiles.$inferSelect;
 export type TIToken = typeof tokens.$inferInsert;
 export type TSToken = typeof tokens.$inferSelect;
 
-export type TIUser = typeof users.$inferInsert;
-export type TSUser = typeof users.$inferSelect;
+export type TIAuthonUser = typeof users.$inferInsert;
+export type TSAuthonUser = typeof users.$inferSelect;
+
+export type TIUser = typeof authOnUser.$inferInsert;
+export type TSUser = typeof authOnUser.$inferSelect;
+
 
 
 
