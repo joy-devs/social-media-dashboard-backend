@@ -114,16 +114,16 @@ export const userRelations = relations(users, ({ one, many }) => ({
   }),
   posts: many(posts),
   comments: many(comments),
-  followsFollower: many(follows, { fields: [users.id], references: [follows.followerId] }),
-  followsFollowing: many(follows, { fields: [users.id], references: [follows.followingId] }),
+  followsFollower: many(follows),
+  followsFollowing: many(follows),
   likes: many(likes),
   tokens: many(tokens),
   profiles: one(profiles, {
     fields: [users.id],
     references: [profiles.userId]
   }),
-  messagesSent: many(messages, { fields: [users.id], references: [messages.senderId] }),
-  messagesReceived: many(messages, { fields: [users.id], references: [messages.recipientId] }),
+  messagesSent: many(messages),
+  messagesReceived: many(messages),
   notifications: many(notifications)
 }));
 
