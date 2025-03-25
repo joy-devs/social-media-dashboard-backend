@@ -6,12 +6,12 @@ Content-Type: application/json
 
 {
 
-"username":"joy" ,
+"username":"Mary" ,
 "password":"110",
 "role":"user" ,
 "address":"nairobi",
-"fullname":"joy wambui",
+"fullname":"Mary wambui",
 "contact_phone":"0787654675",
-"email":"joy@gmail.com"
+"email":"mary@gmail.com"
 
 }

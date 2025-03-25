@@ -8,6 +8,13 @@
       "when": 1727280282234,
       "tag": "0000_wandering_alex_power",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1742893290719,
+      "tag": "0001_workable_wild_pack",
+      "breakpoints": true
     }
   ]
 }
