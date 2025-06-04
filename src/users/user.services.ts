@@ -1,38 +1,34 @@
 import { eq } from "drizzle-orm";
 import db from "../drizzle/db";
-import { users, TIUser, TSUser } from "../drizzle/schema";
+import { users } from "../drizzle/schema";
 
-// Helper to exclude sensitive fields
+// Types
+export type TIUser = typeof users.$inferInsert; // For create/update (includes passwordHash)
+export type TSUser = Omit<typeof users.$inferSelect, "passwordHash">; // For return (exclude passwordHash)
+
+// Helper to exclude passwordHash from result
 const excludePasswordHash = (user: typeof users.$inferSelect): TSUser => {
   const { passwordHash, ...rest } = user;
   return rest;
 };
 
-// Fetch all users (excluding passwordHash)
+// Fetch all users
 export const usersService = async (limit?: number): Promise<TSUser[]> => {
-  const rawUsers = await db.query.users.findMany({
-    limit,
-  });
-
+  const rawUsers = await db.query.users.findMany({ limit });
   return rawUsers.map(excludePasswordHash);
 };
 
-// Fetch single user by ID (excluding passwordHash)
+// Fetch single user by ID
 export const getusersService = async (id: number): Promise<TSUser | undefined> => {
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, id),
-  });
-
-  if (!user) return undefined;
-
-  return excludePasswordHash(user);
+  const user = await db.query.users.findFirst({ where: eq(users.id, id) });
+  return user ? excludePasswordHash(user) : undefined;
 };
 
-// Create user
+// Create new user
 export const createusersService = async (user: TIUser): Promise<string> => {
-  // Ensure passwordHash is provided
+  // passwordHash must be provided
   if (!user.passwordHash) {
-    throw new Error("Missing passwordHash field");
+    throw new Error("passwordHash is required");
   }
 
   await db.insert(users).values(user);
