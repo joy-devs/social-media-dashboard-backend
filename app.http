@@ -8,6 +8,7 @@ Content-Type: application/json
 
 "username":"Mary" ,
 "password":"110",
+"user_id":"1" ,
 "role":"user" ,
 "address":"nairobi",
 "fullname":"Mary wambui",
